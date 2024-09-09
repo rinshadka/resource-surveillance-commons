@@ -1,0 +1,31 @@
+name: schema generation
+
+on:
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  check-first-workflow:
+    runs-on: ubuntu-latest
+    outputs:
+      is_first_workflow_running: ${{ steps.check-status.outputs.is_running }}
+    steps:
+      - name: Check First Workflow Status
+        id: check-status
+        run: |
+          first_workflow_name="Scheduled mat view"
+          runs=$(gh run list --workflow "$first_workflow_name" --status in_progress --limit 1)
+          if [[ -z "$runs" ]]; then
+            echo "is_running=false" >> $GITHUB_ENV
+          else:
+            echo "is_running=true" >> $GITHUB_ENV
+          
+  run-manual-task:
+    runs-on: ubuntu-latest
+    needs: check-first-workflow
+    if: ${{ env.is_running == 'false' }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Task
+        run: echo "Running manual workflow"
