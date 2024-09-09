@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Setting the GitHub token for GitHub CLI
-    outputs:
-      is_first_workflow_running: ${{ steps.check-status.outputs.is_running }}
     steps:
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh -y
+
       - name: Check First Workflow Status
         id: check-status
         run: |
