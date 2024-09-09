@@ -9,6 +9,9 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Setting the GitHub token for GitHub CLI
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Install GitHub CLI
         run: sudo apt-get install gh -y
 
@@ -27,7 +30,7 @@ jobs:
     needs: check-first-workflow
     if: ${{ needs.check-first-workflow.outputs.is_first_workflow_running == 'false' }}
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Run Task
