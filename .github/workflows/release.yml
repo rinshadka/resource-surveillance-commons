@@ -6,12 +6,15 @@ on:
 jobs:
   check-action-status:
     runs-on: ubuntu-latest
+    outputs:
+      action-running: ${{ steps.check-action.outputs.action-running }}
+
     steps:
       - name: Check if another workflow is running
         id: check-action
         run: |
           # Replace with the actual workflow ID or filename (e.g., main.yml)
-          WORKFLOW_ID="<your_workflow_id_or_filename>"
+          WORKFLOW_ID="schedule.yml"
           REPO_OWNER="${{ github.repository_owner }}"
           REPO_NAME="${{ github.event.repository.name }}"
           
@@ -23,15 +26,17 @@ jobs:
           if [ "$RUNNING" -gt 0 ]; then
             echo "Action is already running"
             echo "action_running=true" >> $GITHUB_ENV
+            echo "::set-output name=action-running::true"
           else
             echo "No action is running"
             echo "action_running=false" >> $GITHUB_ENV
+            echo "::set-output name=action-running::false"
           fi
 
   conditional-job:
     runs-on: ubuntu-latest
     needs: check-action-status
-    if: env.action_running == 'false'
+    if: needs.check-action-status.outputs.action-running == 'false'
     steps:
       - name: Run steps if the specific action is not running
         run: echo "Running this job because the other action is not running."
