@@ -1,0 +1,21 @@
+name: Scheduled mat view
+
+on:
+  schedule:
+    # Run every 2 hours
+    - cron: "0 */2 * * *"
+  workflow_dispatch: # Enables manual trigger
+
+jobs:
+  run-scheduled-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run Task
+        run: |
+          echo "Running scheduled or manually triggered task"
+          echo "Sleeping for 5 minutes..."
+          sleep 300 # Sleep for 300 seconds (5 minutes)
+          echo "Task completed after 5 minutes."
