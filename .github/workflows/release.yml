@@ -1,10 +1,8 @@
 name: Conditional Workflow
 
 on:
-  push:
-    branches:
-      - main
-
+  workflow_dispatch: # Manual trigger
+  
 jobs:
   check-action-status:
     runs-on: ubuntu-latest
