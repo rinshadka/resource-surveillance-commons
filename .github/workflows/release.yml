@@ -1,4 +1,4 @@
-name: cehmaaa
+name: Manual Workflow with Conditional Execution
 
 on:
   workflow_dispatch: # Manual trigger
@@ -27,7 +27,6 @@ jobs:
             echo "is_running=false" >> $GITHUB_ENV
           else
             echo "is_running=true" >> $GITHUB_ENV
-          fi
         outputs:
           is_running: ${{ steps.check-status.outputs.is_running }}
 
