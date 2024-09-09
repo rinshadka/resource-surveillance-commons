@@ -6,6 +6,8 @@ on:
 jobs:
   check-first-workflow:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Setting the GitHub token for GitHub CLI
     outputs:
       is_first_workflow_running: ${{ steps.check-status.outputs.is_running }}
     steps:
