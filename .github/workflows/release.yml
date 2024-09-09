@@ -1,4 +1,4 @@
-name: schemaaa
+name: cehmaaa
 
 on:
   workflow_dispatch: # Manual trigger
@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Setting the GitHub token for GitHub CLI
+    outputs:
+      is_running: ${{ steps.check-status.outputs.is_running }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -26,11 +28,13 @@ jobs:
           else
             echo "is_running=true" >> $GITHUB_ENV
           fi
-  
+        outputs:
+          is_running: ${{ steps.check-status.outputs.is_running }}
+
   run-manual-task:
     runs-on: ubuntu-latest
     needs: check-first-workflow
-    if: ${{ env.is_running == 'false' }}
+    if: ${{ needs.check-first-workflow.outputs.is_running == 'false' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
